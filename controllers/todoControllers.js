@@ -12,14 +12,13 @@ const getTodo = asyncHandler(async (req, res) => {
 
 //Add new todo
 const addTodo = asyncHandler(async (req, res) => {
-    const { text, id } = req.body;
+    const { text } = req.body;
     try {
         if (!text) {
             res.status(400).json({ message: "Please add a todo" });
         } else {
             const addTodo = await new Todo({
                 text,
-                id,
             });
             await addTodo.save((error) => {
                 if (error) {

@@ -2,8 +2,9 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { FaSignInAlt } from "react-icons/fa";
+import Spinner from "../components/Spinner";
 import { useNavigate } from "react-router-dom";
-import { login,reset } from "../features/auth/authSlice";
+import { login, reset } from "../features/auth/authSlice";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -40,6 +41,9 @@ const Login = () => {
         };
         dispatch(login(userData));
     };
+    if (isLoading) {
+        return <Spinner />;
+    }
 
     return (
         <>
