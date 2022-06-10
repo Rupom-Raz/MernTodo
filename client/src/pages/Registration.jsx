@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { FaUser } from 'react-icons/fa'
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { register, reset } from "../features/auth/authSlice";
+import { FaUser } from "react-icons/fa";
+
 const Registration = () => {
     const [formData, setFormData] = useState({
         name: "",
@@ -8,6 +13,21 @@ const Registration = () => {
     });
 
     const { name, email, password } = formData;
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user, isLoading, isError, isSuccess, message } = useSelector(
+        (state) => state.auth
+    );
+
+    useEffect(() => {
+        if (isError) {
+            console.log(message);
+        }
+        if (isSuccess || user) {
+            navigate("/login");
+        }
+        dispatch(reset());
+    }, [user, isError, isSuccess, message, navigate, dispatch]);
 
     const onChange = (e) => {
         setFormData((prevState) => ({
@@ -18,6 +38,12 @@ const Registration = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        const userData = {
+            name,
+            email,
+            password,
+        };
+        dispatch(register(userData));
     };
     return (
         <>
@@ -63,7 +89,7 @@ const Registration = () => {
                             onChange={onChange}
                         />
                     </div>
-                   
+
                     <div className="form-group">
                         <button type="submit" className="btn btn-block">
                             Submit
